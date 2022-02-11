@@ -12,9 +12,9 @@
 
 ## Community 
 
-[Telegram Server for Support](https://t.me/tosviolators)
+[Telegram Server for Support]()
 
-[Discord Community Server](https://discord.gg/mtW89Y7prK)
+[Discord Community Server]()
 
 
 ## **Features** : 

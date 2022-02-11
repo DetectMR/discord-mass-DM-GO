@@ -41,19 +41,20 @@ func main() {
 // Options menu
 func Options() {
 	reg := regexp.MustCompile(`(.+):(.+):(.+)`)
-	color.White("Menu:\n |- 01) Invite Joiner [Token]\n |- 02) Mass DM advertiser [Token]\n |- 03) Single DM spam [Token]\n |- 04) Reaction Adder [Token]\n |- 05) Get message [Input]\n |- 06) Email:Pass:Token to Token [Email:Password:Token]\n |- 07) Token Checker [Token]\n |- 08) Guild Leaver [Token]\n |- 09) Token Onliner [Token]\n |- 10) Scraping Menu [Input]\n |- 11) Name Changer [Email:Password:Token]\n |- 12) Profile Picture Changer [Token]\n |- 13) Token Servers Check [Token]\n |- 14) Credits & Info\n |- 15) Exit")
-	color.White("\nEnter your choice: ")
+	color.Green("Меню:\n |- 01) Инвайт на сервер [для Токенов]\n |- 02) Массовая рассылка в ЛС [для Токенов]\n |- 03) Одиночная рассылка в ЛС [для Токенов]\n |- 04) Накрутка реакций  [для Токенов]\n |- 05) Получить сообщение[Input]\n |- 06) Конвертировать mail:Pass:Token в Token [Email:Password:Token]\n |- 07) Токен чекер [для Токенов]]\n |- 08) Выход из сервера [для Токенов]]\n |- 09) Поддержка токенов онлайн[для Токенов]\n |- 10) Парсинг Меню [Input]\n |- 11) Изменить имя [Email:Password:Token]\n |- 12) Изменить аватарку [для Токенов]\n |- 13) Проверьте, находятся ли ваши токены на сервере [для Токенов]\n |- 14) Информация\n |- 15) Выход")
+	color.Red("\nВведите свой выбор: ")
 	var choice int
 	fmt.Scanln(&choice)
 	switch choice {
 	default:
-		color.Red("Invalid choice!")
+		color.Red("Неверный выбор!")
 		Options()
 	case 0:
-		color.Cyan("Debug Mode")
+		color.Cyan("Режим отладки")
 	case 1:
 		var invitechoice int
-		color.White("Invite Menu:\n1) Single Invite\n2) Multiple Invites from file")
+		color.White("color.Green("Инвайт Меню:\n1) Одиночный инвайт\n2) Масовый инвайт из файла")
+")
 		fmt.Scanln(&invitechoice)
 		if invitechoice != 1 && invitechoice != 2 {
 			color.Red("[%v] Invalid choice", time.Now().Format("15:04:05"))
@@ -62,16 +63,16 @@ func Options() {
 		}
 		switch invitechoice {
 		case 1:
-			color.Cyan("Single Invite Mode")
-			color.White("This will join your tokens from tokens.txt to a server")
+			color.Cyan("режим одиночного инвайта")
+			color.Green("Это позволит присоединить ваши токены из файла tokens.txt к серверу")
 			cfg, instances, err := getEverything()
 			if err != nil {
-				color.Red("[%v] Error while getting necessary data: %v", time.Now().Format("15:04:05"), err)
+				color.Red("[%v] Ошибка при получении необходимых данных: %v", time.Now().Format("15:04:05"), err)
 			}
-			color.White("[%v] Enter your invite CODE (The part after discord.gg/): ", time.Now().Format("15:04:05"))
+			color.Green("[%v] Введите приглашения на сервер (всё после discord.gg/): ", time.Now().Format("15:04:05"))
 			var invite string
 			fmt.Scanln(&invite)
-			color.White("[%v] Enter number of Threads (0: Unlimited Threads. 1: For using proper delay. It may be a good idea to use less threads if you're looking to solve captchas): ", time.Now().Format("15:04:05"))
+			color.Green("[%v] Введите количество потоков (0: Неограниченное количество. 1: Для использования надлежащей задержки): ", time.Now().Format("15:04:05"))
 			var threads int
 			fmt.Scanln(&threads)
 
@@ -82,10 +83,10 @@ func Options() {
 				threads = len(instances)
 			}
 
-			color.White("[%v] Enter base delay for joining in seconds (0 for none)", time.Now().Format("15:04:05"))
+			color.Green("[%v] Введите базовую задержку для присоединения в секундах (0 - нет)", time.Now().Format("15:04:05"))
 			var base int
 			fmt.Scanln(&base)
-			color.White("[%v] Enter random delay to be added upon base delay (0 for none)", time.Now().Format("15:04:05"))
+			color.Green("[%v] Введите случайную задержку, которая будет добавлена к базовой задержке (0 - нет).", time.Now().Format("15:04:05"))
 			var random int
 			fmt.Scanln(&random)
 			var delay int
@@ -101,7 +102,7 @@ func Options() {
 				go func(i int) {
 					err := instances[i].Invite(invite)
 					if err != nil {
-						color.Red("[%v] Error while joining: %v", time.Now().Format("15:04:05"), err)
+						color.Red("[%v] Ошибка при присоединении: %v", time.Now().Format("15:04:05"), err)
 					}
 					time.Sleep(time.Duration(delay) * time.Second)
 					c.Done()
@@ -109,35 +110,35 @@ func Options() {
 				}(i)
 			}
 			c.WaitAllDone()
-			color.Green("[%v] All threads finished", time.Now().Format("15:04:05"))
+			color.Green("[%v] Все потоки закончены", time.Now().Format("15:04:05"))
 
 		case 2:
-			color.Cyan("Multiple Invite Mode")
-			color.White("This will join your tokens from tokens.txt to servers from invite.txt")
+			color.Cyan("Режим массового инвайта")
+			color.Green("Это соединит ваши токены из файла tokens.txt с серверами из файла invite.txt")
 			cfg, instances, err := getEverything()
 			if err != nil {
-				color.Red("[%v] Error while getting necessary data: %v", time.Now().Format("15:04:05"), err)
+				color.Red("[%v] Ошибка при получении необходимых данных: %v", time.Now().Format("15:04:05"), err)
 			}
 
 			if len(instances) == 0 {
-				color.Red("[%v] Enter your tokens in tokens.txt", time.Now().Format("15:04:05"))
+				color.Red("[%v] Введите свои токены в файл tokens.txt", time.Now().Format("15:04:05"))
 				ExitSafely()
 			}
 			invites, err := utilities.ReadLines("invite.txt")
 			if err != nil {
-				color.Red("Error while opening invite.txt: %v", err)
+				color.Red("Ошибка при открытии файла invite.txt: %v", err)
 				ExitSafely()
 				return
 			}
 			if len(invites) == 0 {
-				color.Red("[%v] Enter your invites in invite.txt", time.Now().Format("15:04:05"))
+				color.Red("[%v] Введите свои приглашения в файл invite.txt", time.Now().Format("15:04:05"))
 				ExitSafely()
 				return
 			}
-			color.White("Enter delay between 2 consecutive joins by 1 token in seconds: ")
+			color.Green("Введите задержку между 2 последовательными присоединениями по 1 Токену в секундах: ")
 			var delay int
 			fmt.Scanln(&delay)
-			color.White("Enter number of Threads (0 for unlimited): ")
+			color.Green("Введите количество потоков (0 для неограниченного количества): ")
 			var threads int
 			fmt.Scanln(&threads)
 			if threads > len(instances) {
@@ -154,7 +155,7 @@ func Options() {
 					for j := 0; j < len(invites); j++ {
 						err := instances[i].Invite(invites[j])
 						if err != nil {
-							color.Red("[%v] Error while joining: %v", time.Now().Format("15:04:05"), err)
+							color.Red("[%v] Ошибка при присоединении: %v", time.Now().Format("15:04:05"), err)
 						}
 						time.Sleep(time.Duration(delay) * time.Second)
 					}
@@ -162,31 +163,31 @@ func Options() {
 				}(i)
 			}
 			c.WaitAllDone()
-			color.Green("[%v] All threads finished", time.Now().Format("15:04:05"))
+			color.Green("[%v] Все потоки закончены", time.Now().Format("15:04:05"))
 		}
 	case 2:
 
-		color.Cyan("Mass DM Advertiser/Spammer")
-		color.White("This will DM everyone in memberids.txt from your tokens")
+		color.Cyan("Массовая рассылка В ЛС")
+		color.Green("Отправка Личного Сообщения всем пользователям в файле memberids.txt  всеми вашими токенами в файле tokens.txt")
 		members, err := utilities.ReadLines("memberids.txt")
 		if err != nil {
-			color.Red("Error while opening memberids.txt: %v", err)
+			color.Red("Ошибка при открытии файла memberids.txt: %v", err)
 			ExitSafely()
 		}
 		cfg, instances, err := getEverything()
 		if err != nil {
-			color.Red("[%v] Error while getting necessary data: %v", time.Now().Format("15:04:05"), err)
+			color.Red("[%v] Ошибка при получении необходимых данных: %v", time.Now().Format("15:04:05"), err)
 		}
 		var msg utilities.Message
-		color.White("Press 1 to use messages from file or press 2 to enter a message: ")
+		color.Green("Нажмите - (1) чтобы использовать сообщения из файла (message.json).\nНажмите - (2) чтобы ввести сообщение здесь: ")
 		var messagechoice int
 		fmt.Scanln(&messagechoice)
 		if messagechoice != 1 && messagechoice != 2 {
-			color.Red("[%v] Invalid choice", time.Now().Format("15:04:05"))
+			color.Red("[%v] Неверный выбор", time.Now().Format("15:04:05"))
 			ExitSafely()
 		}
 		if messagechoice == 2 {
-			color.White("Enter your message, use \\n for changing lines. You can also set a constant message in message.json")
+			color.Green("Введите свое сообщение, для новой строки исполйьзуйте код (\n). Вы также можете изпользовать этот код (\n)  в файле message.json")
 			scanner := bufio.NewScanner(os.Stdin)
 			var text string
 			if scanner.Scan() {
@@ -199,18 +200,18 @@ func Options() {
 			msgs = append(msgs, msg)
 			err := setMessages(instances, msgs)
 			if err != nil {
-				color.Red("[%v] Error while setting messages: %v", time.Now().Format("15:04:05"), err)
+				color.Red("[%v] Ошибка при вводе сообщения: %v", time.Now().Format("15:04:05"), err)
 				ExitSafely()
 			}
 		} else {
 			var msgs []utilities.Message
 			err := setMessages(instances, msgs)
 			if err != nil {
-				color.Red("[%v] Error while setting messages: %v", time.Now().Format("15:04:05"), err)
+				color.Red("[%v] Ошибка при вводе сообщения: %v", time.Now().Format("15:04:05"), err)
 				ExitSafely()
 			}
 		}
-		color.White("[%v] Do you wish to use Advanced Settings? 0: No, 1: Yes: ", time.Now().Format("15:04:05"))
+		color.Green("[%v] Хотите ли вы использовать расширенные настройки? 0: Нет, 1: Да:", time.Now().Format("15:04:05"))
 		var advancedchoice int
 		var checkchoice int
 		var serverid string
@@ -219,29 +220,29 @@ func Options() {
 		var maxattempts int
 		fmt.Scanln(&advancedchoice)
 		if advancedchoice != 0 && advancedchoice != 1 {
-			color.Red("[%v] Invalid choice", time.Now().Format("15:04:05"))
+			color.Red("[%v] Неверный выбор", time.Now().Format("15:04:05"))
 			ExitSafely()
 		}
 		if advancedchoice == 1 {
-			color.White("[%v] Do you wish to check if token is still in server before every DM? [0: No, 1: Yes]", time.Now().Format("15:04:05"))
+			color.White("[%v] Вы хотите проверять, находится ли токен на сервере перед каждым DM? [0: Нет, 1: Да]", time.Now().Format("15:04:05"))
 			fmt.Scanln(&checkchoice)
 			if checkchoice != 0 && checkchoice != 1 {
-				color.Red("[%v] Invalid choice", time.Now().Format("15:04:05"))
+				color.Red("[%v] Неверный выбор", time.Now().Format("15:04:05"))
 				ExitSafely()
 			}
 			if checkchoice == 1 {
-				color.White("[%v] Enter Server ID", time.Now().Format("15:04:05"))
+				color.White("[%v] Введите ID сервера", time.Now().Format("15:04:05"))
 				fmt.Scanln(&serverid)
-				color.White("[%v] Do you wish to try rejoining the server if token is not in server? [0: No, 1: Yes]", time.Now().Format("15:04:05"))
+				color.White("[%v] Хотите ли вы попробовать снова подключиться к серверу, если токен не находится на сервере? [0: Нет, 1: Да]", time.Now().Format("15:04:05"))
 				fmt.Scanln(&tryjoinchoice)
 				if tryjoinchoice != 0 && tryjoinchoice != 1 {
-					color.Red("[%v] Invalid choice", time.Now().Format("15:04:05"))
+					color.Red("[%v] Неверный выбор", time.Now().Format("15:04:05"))
 					ExitSafely()
 				}
 				if tryjoinchoice == 1 {
-					color.White("[%v] Enter a permanent invite code", time.Now().Format("15:04:05"))
+					color.White("[%v] Введите постоянный код приглашения", time.Now().Format("15:04:05"))
 					fmt.Scanln(&invite)
-					color.White("[%v] Enter max rejoin attempts", time.Now().Format("15:04:05"))
+					color.White("[%v] Введите максимальное количество попыток повторного присоединения", time.Now().Format("15:04:05"))
 					fmt.Scanln(&maxattempts)
 				}
 			}
@@ -254,7 +255,7 @@ func Options() {
 		var failedCount = 0
 		completed, err = utilities.ReadLines("completed.txt")
 		if err != nil {
-			color.Red("Error while opening completed.txt: %v", err)
+			color.Red("Ошибка при открытии файла completed.txt: %v", err)
 			ExitSafely()
 		}
 		if cfg.Skip {
@@ -263,17 +264,17 @@ func Options() {
 		if cfg.SkipFailed {
 			failedSkip, err := utilities.ReadLines("failed.txt")
 			if err != nil {
-				color.Red("Error while opening failed.txt: %v", err)
+				color.Red("Ошибка при открытии файла failed.txt: %v", err)
 				ExitSafely()
 			}
 			members = utilities.RemoveSubset(members, failedSkip)
 		}
 		if len(instances) == 0 {
-			color.Red("[%v] Enter your tokens in tokens.txt ", time.Now().Format("15:04:05"))
+			color.Red("[%v] Введите свои токены в файл tokens.txt ", time.Now().Format("15:04:05"))
 			ExitSafely()
 		}
 		if len(members) == 0 {
-			color.Red("[%v] Enter your member ids in memberids.txt or ensure that all of them are not in completed.txt", time.Now().Format("15:04:05"))
+			color.Red("[%v] Введите идентификаторы участников в файл memberids.txt или убедитесь, что все они не находятся в файле completed.txt", time.Now().Format("15:04:05"))
 			ExitSafely()
 		}
 		if len(members) < len(instances) {
@@ -282,7 +283,7 @@ func Options() {
 		msgs := instances[0].Messages
 		for i := 0; i < len(msgs); i++ {
 			if msgs[i].Content == "" && msgs[i].Embeds == nil {
-				color.Red("[%v] WARNING: Message %v is empty", time.Now().Format("15:04:05"), i)
+				color.Red("[%v] ПРЕДУПРЕЖДЕНИЕ: Сообщение %v пустое", time.Now().Format("15:04:05"), i)
 			}
 		}
 		// Send members to a channel
@@ -316,16 +317,16 @@ func Options() {
 
 					// Breaking loop if maximum DMs reached
 					if cfg.MaxDMS != 0 && instances[i].Count >= cfg.MaxDMS {
-						color.Yellow("[%v] Maximum DMs reached for %v", time.Now().Format("15:04:05"), instances[i].Token)
+							color.Yellow("[%v] Максимальные значения ЛС достигнуты для %v", time.Now().Format("15:04:05"), instances[i].Token)
 						break
 					}
 					// Start websocket connection if not already connected and reconnect if dead
 					if cfg.Websocket && instances[i].Ws == nil {
 						err := instances[i].StartWS()
 						if err != nil {
-							color.Red("[%v] Error while opening websocket: %v", time.Now().Format("15:04:05"), err)
+							color.Red("[%v] Ошибка при открытии вебсокета: %v", time.Now().Format("15:04:05"), err)
 						} else {
-							color.Green("[%v] Websocket opened %v", time.Now().Format("15:04:05"), instances[i].Token)
+							color.Green("[%v] Открыт вебсокет %v", time.Now().Format("15:04:05"), instances[i].Token)
 						}
 					}
 					if cfg.Websocket && cfg.Receive && instances[i].Ws != nil && !instances[i].Receiver {
@@ -347,7 +348,7 @@ func Options() {
 										tokenPart := strings.Split(instances[i].Token, ".")[0]
 										dec, err := base64.StdEncoding.DecodeString(tokenPart)
 										if err != nil {
-											color.Red("[%v] Error while decoding token: %v", time.Now().Format("15:04:05"), err)
+											color.Red("[%v] Ошибка при декодировании токена: %v", time.Now().Format("15:04:05"), err)
 											continue
 										}
 										instances[i].ID = string(dec)
@@ -355,11 +356,11 @@ func Options() {
 									if mar.Data.Author.ID == instances[i].ID {
 										continue
 									}
-									color.Green("[%v] %v#%v sent a message to %v : %v", time.Now().Format("15:04:05"), mar.Data.Author.Username, mar.Data.Author.Discriminator, instances[i].Token, mar.Data.Content)
+									color.Green("[%v] %v#%v отправил сообщение %v : %v", time.Now().Format("15:04:05"), mar.Data.Author.Username, mar.Data.Author.Discriminator, instances[i].Token, mar.Data.Content)
 									newStr := "Username: " + mar.Data.Author.Username + "#" + mar.Data.Author.Discriminator + "\nID: " + mar.Data.Author.ID + "\n" + "Message: " + mar.Data.Content + "\n"
 									err = utilities.WriteLines("received.txt", newStr)
 									if err != nil {
-										color.Red("[%v] Error while opening received.txt: %v", time.Now().Format("15:04:05"), err)
+										color.Red("[%v] Ошибка при открытии файла received.txt: %v", time.Now().Format("15:04:05"), err)
 									}
 								}
 							}
@@ -369,7 +370,7 @@ func Options() {
 					status := instances[i].CheckToken()
 					if status != 200 && status != 204 && status != 429 && status != -1 {
 						failedCount++
-						color.Red("[%v] Token %v might be locked - Stopping instance and adding members to failed list. %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, status, failedCount)
+						color.Red("[%v] Токен %v может быть заблокирован - Остановка потока и добавление пользователя в файл failed.txt. %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, status, failedCount)
 						failed = append(failed, member)
 						dead = append(dead, instances[i].Token)
 						err := utilities.WriteLines("failed.txt", member)
@@ -385,22 +386,22 @@ func Options() {
 						if checkchoice == 1 {
 							r, err := instances[i].ServerCheck(serverid)
 							if err != nil {
-								color.Red("[%v] Error while checking server: %v", time.Now().Format("15:04:05"), err)
+								color.Red("[%v] Ошибка при проверке сервера: %v", time.Now().Format("15:04:05"), err)
 								continue
 							}
 							if r != 200 && r != 204 && r != 429 {
 								if tryjoinchoice == 0 {
-									color.Red("[%v] Stopping token %v [Not in server]", time.Now().Format("15:04:05"), instances[i].Token)
+									color.Red("[%v] Stopping token %v [Нет на сервере]", time.Now().Format("15:04:05"), instances[i].Token)
 
 									break
 								} else {
 									if instances[i].Rejoin >= maxattempts {
-										color.Red("[%v] Stopping token %v [Max server rejoin attempts]", time.Now().Format("15:04:05"), instances[i].Token)
+										color.Red("[%v] Stopping token %v [Максимальное количество попыток повторного подключения к серверу]", time.Now().Format("15:04:05"), instances[i].Token)
 										break
 									}
 									err := instances[i].Invite(invite)
 									if err != nil {
-										color.Red("[%v] Error while joining server: %v", time.Now().Format("15:04:05"), err)
+										color.Red("[%v] Ошибка при подключении к серверу: %v", time.Now().Format("15:04:05"), err)
 										instances[i].Rejoin++
 										continue
 									}
@@ -415,7 +416,7 @@ func Options() {
 						info, err := instances[i].UserInfo(member)
 						if err != nil {
 							failedCount++
-							color.Red("[%v] Error while getting user info: %v [%v]", time.Now().Format("15:04:05"), err, failedCount)
+							color.Red("[%v] Ошибка при получении информации о пользователе: %v [%v]", time.Now().Format("15:04:05"), err, failedCount)
 							err = WriteLine("input/failed.txt", member)
 							if err != nil {
 								fmt.Println(err)
@@ -426,7 +427,7 @@ func Options() {
 						}
 						if len(info.Mutual) == 0 {
 							failedCount++
-							color.Red("[%v] Token %v failed to DM %v [No Mutual Server] [%v]", time.Now().Format("15:04:05"), instances[i].Token, info.User.Username+info.User.Discriminator, failedCount)
+							color.Red("[%v] Токен %v не смог отправить сообщения в ЛС %v [Нет общих серверов] [%v]", time.Now().Format("15:04:05"), instances[i].Token, info.User.Username+info.User.Discriminator, failedCount)
 							err = WriteLine("input/failed.txt", member)
 							if err != nil {
 								fmt.Println(err)
@@ -439,17 +440,17 @@ func Options() {
 						if cfg.Friend && cfg.Websocket {
 							x, err := strconv.Atoi(info.User.Discriminator)
 							if err != nil {
-								color.Red("[%v] Error while adding friend: %v", time.Now().Format("15:04:05"), err)
+								color.Red("[%v] Ошибка при добавлении друга: %v", time.Now().Format("15:04:05"), err)
 							}
 							resp, err := instances[i].Friend(info.User.Username, x)
 							if err != nil {
-								color.Red("[%v] Error while adding friend: %v", time.Now().Format("15:04:05"), err)
+								color.Red("[%v] Ошибка при добавлении друга: %v", time.Now().Format("15:04:05"), err)
 							}
 							if resp.StatusCode != 204 && err != nil {
 								body, _ := utilities.ReadBody(*resp)
-								color.Red("[%v] Error while adding friend: %v", time.Now().Format("15:04:05"), string(body))
+								color.Red("[%v] Ошибка при добавлении друга: %v", time.Now().Format("15:04:05"), string(body))
 							} else {
-								color.Green("[%v] Added friend %v", time.Now().Format("15:04:05"), info.User.Username+"#"+info.User.Discriminator)
+								color.Green("[%v] Добавленный друг %v", time.Now().Format("15:04:05"), info.User.Username+"#"+info.User.Discriminator)
 							}
 						}
 					}
@@ -457,7 +458,7 @@ func Options() {
 					snowflake, err := instances[i].OpenChannel(member)
 					if err != nil {
 						failedCount++
-						color.Red("[%v] Error while opening DM channel: %v [%v]", time.Now().Format("15:04:05"), err, failedCount)
+						color.Red("[%v] Ошибка при открытии  ЛС: %v [%v]", time.Now().Format("15:04:05"), err, failedCount)
 						err = WriteLine("input/failed.txt", member)
 						if err != nil {
 							fmt.Println(err)
@@ -468,7 +469,7 @@ func Options() {
 					resp, err := instances[i].SendMessage(snowflake, member)
 					if err != nil {
 						failedCount++
-						color.Red("[%v] Error while sending message: %v [%v]", time.Now().Format("15:04:05"), err, failedCount)
+						color.Red("[%v] Ошибка при отправке сообщения: %v [%v]", time.Now().Format("15:04:05"), err, failedCount)
 						err = WriteLine("input/failed.txt", member)
 						if err != nil {
 							fmt.Println(err)
@@ -479,7 +480,7 @@ func Options() {
 					body, err := utilities.ReadBody(resp)
 					if err != nil {
 						failedCount++
-						color.Red("[%v] Error while reading body: %v [%v]", time.Now().Format("15:04:05"), err, failedCount)
+						color.Red("[%v] Ошибка при чтении тела: %v [%v]", time.Now().Format("15:04:05"), err, failedCount)
 						err = WriteLine("input/failed.txt", member)
 						if err != nil {
 							fmt.Println(err)
@@ -507,11 +508,11 @@ func Options() {
 						}
 						completed = append(completed, member)
 						session = append(session, member)
-						color.Green("[%v] Token %v sent DM to %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, user, len(session))
+						color.Green("[%v] Токен %v отправил ЛС на %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, user, len(session))
 						if cfg.Websocket && cfg.Call && instances[i].Ws != nil {
 							err := instances[i].Call(snowflake)
 							if err != nil {
-								color.Red("[%v] %v Error while calling %v: %v", time.Now().Format("15:04:05"), instances[i].Token, user, err)
+								color.Red("[%v] %v Ошибка при вызове %v: %v", time.Now().Format("15:04:05"), instances[i].Token, user, err)
 							}
 							// Unfriended people can't ring.
 							//
@@ -533,9 +534,9 @@ func Options() {
 						if err != nil {
 							fmt.Println(err)
 						}
-						color.Yellow("[%v] Token %v sleeping for %v minutes!", time.Now().Format("15:04:05"), instances[i].Token, int(cfg.LongDelay/60))
+						color.Yellow("[%v] Токен %v в тайм ауте %v минут!", time.Now().Format("15:04:05"), instances[i].Token, int(cfg.LongDelay/60))
 						time.Sleep(time.Duration(cfg.LongDelay) * time.Second)
-						color.Yellow("[%v] Token %v continuing!", time.Now().Format("15:04:05"), instances[i].Token)
+						color.Yellow("[%v] Токен %v продолжил!", time.Now().Format("15:04:05"), instances[i].Token)
 						// Forbidden - DM's are closed
 					} else if resp.StatusCode == 403 && response.Code == 50007 {
 						failedCount++
@@ -543,7 +544,7 @@ func Options() {
 						if err != nil {
 							fmt.Println(err)
 						}
-						color.Red("[%v] Token %v failed to DM %v User has DMs closed or not present in server %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, user, string(body), failedCount)
+						color.Red("[%v] Токен %v не удалось отправить ЛС %v Пользователь имеет закрытое ЛС или отсутствует на сервере %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, user, string(body), failedCount)
 						// Forbidden - Locked or Disabled
 					} else if (resp.StatusCode == 403 && response.Code == 40002) || resp.StatusCode == 401 || resp.StatusCode == 405 {
 						failedCount++
@@ -551,7 +552,7 @@ func Options() {
 						if err != nil {
 							fmt.Println(err)
 						}
-						color.Red("[%v] Token %v is locked or disabled. Stopping instance. %v %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, resp.StatusCode, string(body), failedCount)
+						color.Red("[%v] Токен %v заблокирован или отключен. Остановка экземпляра. %v %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, resp.StatusCode, string(body), failedCount)
 						dead = append(dead, instances[i].Token)
 						// Stop token if locked or disabled
 						if cfg.Stop {
@@ -564,10 +565,10 @@ func Options() {
 						if err != nil {
 							fmt.Println(err)
 						}
-						color.Red("[%v] Token %v can't DM %v. It may not have bypassed membership screening or it's verification level is too low or the server requires new members to wait 10 minutes before they can interact in the server. %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, user, string(body), failedCount)
+						color.Red("[%v] Токен %v не может отправить ЛС %v. Возможно, он не прошел проверку на членство, или его уровень проверки слишком низок, или сервер требует от новых членов подождать 10 минут, прежде чем они смогут взаимодействовать на сервере.%v [%v]", time.Now().Format("15:04:05"), instances[i].Token, user, string(body), failedCount)
 						// General case - Continue loop. If problem with instance, it will be stopped at start of loop.
 					} else if resp.StatusCode == 429 {
-						color.Red("[%v] Token %v is being rate limited. Sleeping for 10 seconds", time.Now().Format("15:04:05"), instances[i].Token)
+						color.Red("[%v] Токен %v ограничен лимитом. Сон в течение 10 секунд", time.Now().Format("15:04:05"), instances[i].Token)
 						time.Sleep(10 * time.Second)
 					} else {
 						failedCount++
@@ -575,7 +576,7 @@ func Options() {
 						if err != nil {
 							fmt.Println(err)
 						}
-						color.Red("[%v] Token %v couldn't DM %v Error Code: %v; Status: %v; Message: %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, user, response.Code, resp.Status, response.Message, failedCount)
+						color.Red("[%v] Токен %v не смог отправить ЛС %v Код ошибки: %v; Статус: %v; Сообщение: %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, user, response.Code, resp.Status, response.Message, failedCount)
 					}
 					time.Sleep(time.Duration(cfg.Delay) * time.Second)
 				}
@@ -583,10 +584,10 @@ func Options() {
 		}
 		wg.Wait()
 
-		color.Green("[%v] Threads have finished! Writing to file", time.Now().Format("15:04:05"))
+		color.Green("[%v] Потоки завершени! Запись в файл", time.Now().Format("15:04:05"))
 
 		elapsed := time.Since(start)
-		color.Green("[%v] DM advertisement took %v. Successfully sent DMs to %v IDs. Failed to send DMs to %v IDs. %v tokens are dis-functional & %v tokens are functioning", time.Now().Format("15:04:05"), elapsed.Seconds(), len(completed), len(failed), len(dead), len(instances)-len(dead))
+		color.Green("[%v] Рассылка ЛС занимала %v. Успешно отправлены ЛС на %v ID. Не удалось отправить ЛС на %v ID. %v Токены не функционируют и %v Токены функционируют", time.Now().Format("15:04:05"), elapsed.Seconds(), len(completed), len(failed), len(dead), len(instances)-len(dead))
 		if cfg.Remove {
 			var tokens []string
 			for i := 0; i < len(instances); i++ {
@@ -597,7 +598,7 @@ func Options() {
 			if err != nil {
 				fmt.Println(err)
 			}
-			color.Green("Updated tokens.txt")
+			color.Green("Обновленния файла tokens.txt")
 		}
 		if cfg.RemoveM {
 			m := utilities.RemoveSubset(members, completed)
@@ -617,8 +618,8 @@ func Options() {
 		}
 
 	case 3:
-		color.Cyan("Single DM Spammer")
-		color.White("Enter 0 for one message; Enter 1 for continuous spam")
+		color.Cyan("Одиночный спамер")
+		color.White("Введите 0 для одного сообщения; Введите 1 для непрерывного спама")
 		var choice int
 		fmt.Scanln(&choice)
 		cfg, instances, err := getEverything()
@@ -627,15 +628,15 @@ func Options() {
 			ExitSafely()
 		}
 		var msg utilities.Message
-		color.White("Press 1 to use message from file or press 2 to enter a message: ")
+		color.White("Нажмите 1, чтобы использовать сообщение из файла, или нажмите 2, чтобы ввести сообщение: ")
 		var messagechoice int
 		fmt.Scanln(&messagechoice)
 		if messagechoice != 1 && messagechoice != 2 {
-			color.Red("[%v] Invalid choice", time.Now().Format("15:04:05"))
+			color.Red("[%v] Неверный выбор", time.Now().Format("15:04:05"))
 			ExitSafely()
 		}
 		if messagechoice == 2 {
-			color.White("Enter your message, use \\n for changing lines. To use an embed, put message in message.json: ")
+			color.White("Введите свое сообщение, для новой строки используйте \\n. Чтобы использовать вставку, поместите сообщение в файл message.json: ")
 			scanner := bufio.NewScanner(os.Stdin)
 			var text string
 			if scanner.Scan() {
@@ -648,19 +649,19 @@ func Options() {
 			msgs = append(msgs, msg)
 			err := setMessages(instances, msgs)
 			if err != nil {
-				color.Red("[%v] Error while setting messages: %v", time.Now().Format("15:04:05"), err)
+				color.Red("[%v] Ошибка в сообщений: %v", time.Now().Format("15:04:05"), err)
 				ExitSafely()
 			}
 		} else {
 			var msgs []utilities.Message
 			err := setMessages(instances, msgs)
 			if err != nil {
-				color.Red("[%v] Error while setting messages: %v", time.Now().Format("15:04:05"), err)
+				color.Red("[%v] Ошибка в сообщений: %v", time.Now().Format("15:04:05"), err)
 				ExitSafely()
 			}
 		}
 
-		color.White("Ensure a common link and enter victim's ID: ")
+		color.White("Обеспечьте общую связь и введите ID жертвы: ")
 		var victim string
 		fmt.Scanln(&victim)
 		var wg sync.WaitGroup
@@ -684,9 +685,9 @@ func Options() {
 						fmt.Println(err)
 					}
 					if resp.StatusCode == 200 {
-						color.Green("[%v] Token %v DM'd %v", time.Now().Format("15:04:05"), instances[i].Token, victim)
+						color.Green("[%v] Токен %v ЛС %v", time.Now().Format("15:04:05"), instances[i].Token, victim)
 					} else {
-						color.Red("[%v] Token %v failed to DM %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, victim, string(body))
+						color.Red("[%v] Токен %v ошибка при отправки ЛС %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, victim, string(body))
 					}
 				}(i)
 			}
@@ -709,9 +710,9 @@ func Options() {
 							fmt.Println(err)
 						}
 						if resp.StatusCode == 200 {
-							color.Green("[%v] Token %v DM'd %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, victim, c)
+							color.Green("[%v] Токен %v ЛС %v [%v]", time.Now().Format("15:04:05"), instances[i].Token, victim, c)
 						} else {
-							color.Red("[%v] Token %v failed to DM %v", time.Now().Format("15:04:05"), instances[i].Token, victim)
+							color.Red("[%v] Токен %v ошибка при отправки ЛС %v", time.Now().Format("15:04:05"), instances[i].Token, victim)
 						}
 						c++
 					}
@@ -719,12 +720,12 @@ func Options() {
 				wg.Wait()
 			}
 		}
-		color.Green("[%v] Threads have finished!", time.Now().Format("15:04:05"))
+		color.Green("[%v] Потоки завершены!", time.Now().Format("15:04:05"))
 
 	case 4:
-		color.Cyan("Reaction Adder")
-		color.White("Note: You don't need to do this to send DMs in servers.")
-		color.White("Menu:\n1) From message\n2) Manually")
+		color.Cyan("Накрутка реакций")
+		color.White("Примечание: Вам не нужно делать это, чтобы отправлять ЛС на серверах.")
+		color.White("Меню:\n1) Из сообщения\n2) Вручную")
 		var choice int
 		fmt.Scanln(&choice)
 		cfg, instances, err := getEverything()
@@ -735,20 +736,20 @@ func Options() {
 		var wg sync.WaitGroup
 		wg.Add(len(instances))
 		if choice == 1 {
-			color.Cyan("Enter a token which can see the message:")
+			color.Cyan("Введите Токен:")
 			var token string
 			fmt.Scanln(&token)
-			color.White("Enter message ID: ")
+			color.White("Введите ID сообщения: ")
 			var id string
 			fmt.Scanln(&id)
-			color.White("Enter channel ID: ")
+			color.White("Введите ID канала: ")
 			var channel string
 			fmt.Scanln(&channel)
 			msg, err := utilities.GetRxn(channel, id, token)
 			if err != nil {
 				fmt.Println(err)
 			}
-			color.White("Select Emoji")
+			color.White("Выберите Emoji")
 			for i := 0; i < len(msg.Reactions); i++ {
 				color.White("%v) %v %v", i, msg.Reactions[i].Emojis.Name, msg.Reactions[i].Count)
 			}
@@ -768,24 +769,24 @@ func Options() {
 					err := instances[i].React(channel, id, send)
 					if err != nil {
 						fmt.Println(err)
-						color.Red("[%v] %v failed to react", time.Now().Format("15:04:05"), instances[i].Token)
+						color.Red("[%v] %v не отреагировал", time.Now().Format("15:04:05"), instances[i].Token)
 					} else {
-						color.Green("[%v] %v reacted to the emoji", time.Now().Format("15:04:05"), instances[i].Token)
+						color.Green("[%v] %v отреагировал на эмодзи", time.Now().Format("15:04:05"), instances[i].Token)
 					}
 
 				}(i)
 			}
 			wg.Wait()
-			color.Green("[%v] Completed all threads.", time.Now().Format("15:04:05"))
+			color.Green("[%v] Завершил все потоки.", time.Now().Format("15:04:05"))
 		}
 		if choice == 2 {
-			color.Cyan("Enter channel ID")
+			color.Cyan("Введите ID канала")
 			var channel string
 			fmt.Scanln(&channel)
-			color.White("Enter message ID")
+			color.White("Введите ID сообщения")
 			var id string
 			fmt.Scanln(&id)
-			color.Red("If you have a message, please use choice 1. If you want to add a custom emoji. Follow these instructions, if you don't, it won't work.\n If it's a default emoji which appears on the emoji keyboard, just copy it as TEXT not how it appears on Discord with the colons. Type it as text, it might look like 2 question marks on console but ignore.\n If it's a custom emoji (Nitro emoji) type it like this -> name:emojiID To get the emoji ID, copy the emoji link and copy the emoji ID from the URL.\nIf you do not follow this, it will not work. Don't try to do impossible things like trying to START a nitro reaction with a non-nitro account.")
+			color.Red("Если у вас есть сообщение, пожалуйста, используйте вариант 1. Если вы хотите добавить пользовательский эмодзи. Следуйте этим инструкциям, если вы этого не сделаете, ничего не получится.\n Если это эмодзи по умолчанию, который появляется на клавиатуре эмодзи, просто скопируйте его как ТЕКСТ, а не как он появляется в Discord с двоеточиями. Если это пользовательский эмодзи (Nitro emoji), введите его следующим образом -> name:emojiID Чтобы получить идентификатор эмодзи, скопируйте ссылку на эмодзи и скопируйте идентификатор эмодзи из URL.\n Если вы не будете следовать этому, он не будет работать. Не пытайтесь делать невозможные вещи, например, пытаться запустить нитрореакцию с помощью ненитросчета.")
 			color.White("Enter emoji")
 			var emoji string
 			fmt.Scanln(&emoji)
@@ -796,46 +797,46 @@ func Options() {
 					err := instances[i].React(channel, id, emoji)
 					if err != nil {
 						fmt.Println(err)
-						color.Red("[%v] %v failed to react", time.Now().Format("15:04:05"), instances[i].Token)
+						color.Red("[%v] %v не отреагировал", time.Now().Format("15:04:05"), instances[i].Token)
 					}
-					color.Green("[%v] %v reacted to the emoji", time.Now().Format("15:04:05"), instances[i].Token)
+					color.Green("[%v] %v отреагировал на эмодзи", time.Now().Format("15:04:05"), instances[i].Token)
 				}(i)
 			}
 			wg.Wait()
-			color.Green("[%v] Completed all threads.", time.Now().Format("15:04:05"))
+			color.Green("[%v] Завершил все потоки.", time.Now().Format("15:04:05"))
 		}
 
 	case 5:
 		// Uses ?around & ?limit parameters to discord's REST API to get messages to get the exact message needed
-		color.Cyan("Get Message - This will get the message from Discord which you want to send.")
+		color.Cyan("Получить сообщение - Это позволит получить ответное сообщение из Discord, которое вы хотите отправить..")
 		color.White("Enter your token: \n")
 		var token string
 		fmt.Scanln(&token)
-		color.White("Enter the channelID: \n")
+		color.White("Введите ID канала: \n")
 		var channelID string
 		fmt.Scanln(&channelID)
-		color.White("Enter the messageID: \n")
+		color.White("Введите ID сообщения: \n")
 		var messageID string
 		fmt.Scanln(&messageID)
 		message, err := utilities.FindMessage(channelID, messageID, token)
 		if err != nil {
-			color.Red("Error while finding message: %v", err)
+			color.Red("Ошибка при поиске сообщения: %v", err)
 			ExitSafely()
 			return
 		}
-		color.Green("[%v] Message: %v", time.Now().Format("15:04:05"), message)
+		color.Green("[%v] Сообщение: %v", time.Now().Format("15:04:05"), message)
 
 	case 6:
 		// Quick way to interconvert tokens from a popular format to the one this program supports.
-		color.Cyan("Email:Password:Token to Token")
+		color.Cyan("Email:Password:Token в Token")
 		Tokens, err := utilities.ReadLines("tokens.txt")
 		if err != nil {
-			color.Red("Error while opening tokens.txt: %v", err)
+			color.Red("Ошибка открытия tokens.txt: %v", err)
 			ExitSafely()
 			return
 		}
 		if len(Tokens) == 0 {
-			color.Red("[%v] Enter your tokens in tokens.txt", time.Now().Format("15:04:05"))
+			color.Red("[%v] Введите ваши Токены в tokens.txt", time.Now().Format("15:04:05"))
 			ExitSafely()
 			return
 		}
@@ -848,20 +849,20 @@ func Options() {
 		}
 		t := utilities.TruncateLines("tokens.txt", onlytokens)
 		if t != nil {
-			color.Red("[%v] Error while truncating tokens.txt: %v", time.Now().Format("15:04:05"), t)
+			color.Red("[%v]При конвертирование ошибки tokens.txt: %v", time.Now().Format("15:04:05"), t)
 			ExitSafely()
 			return
 		}
 
 	case 7:
 		// Basic token checker
-		color.Cyan("Token checker")
+		color.Cyan("Токен Чекер")
 		cfg, instances, err := getEverything()
 		if err != nil {
-			color.Red("[%v] Error while getting necessary data: %v", time.Now().Format("15:04:05"), err)
+			color.Red("[%v] Ошибка при получении необходимых данных: %v", time.Now().Format("15:04:05"), err)
 			ExitSafely()
 		}
-		color.White("Enter the number of threads: (0 for Unlimited)\n")
+		color.White("Введите количество потоков: (0 для неограниченного количества)\n")
 		var threads int
 		fmt.Scanln(&threads)
 		if threads > len(instances) {
@@ -878,9 +879,9 @@ func Options() {
 			go func(i int) {
 				err := instances[i].CheckToken()
 				if err != 200 {
-					color.Red("[%v] Token Invalid %v", time.Now().Format("15:04:05"), instances[i].Token)
+					color.Red("[%v] Токен недействителен %v", time.Now().Format("15:04:05"), instances[i].Token)
 				} else {
-					color.Green("[%v] Token Valid %v", time.Now().Format("15:04:05"), instances[i].Token)
+					color.Green("[%v] Токен действителен %v", time.Now().Format("15:04:05"), instances[i].Token)
 					working = append(working, instances[i].Token)
 				}
 				c.Done()
@@ -889,23 +890,23 @@ func Options() {
 		c.WaitAllDone()
 		t := utilities.TruncateLines("tokens.txt", working)
 		if t != nil {
-			color.Red("[%v] Error while truncating tokens.txt: %v", time.Now().Format("15:04:05"), t)
+			color.Red("[%v] Ошибка при усечении файла tokens.txt: %v", time.Now().Format("15:04:05"), t)
 			ExitSafely()
 			return
 		}
 
-		color.Green("[%v] All threads finished", time.Now().Format("15:04:05"))
+		color.Green("[%v]Завершил все потоки", time.Now().Format("15:04:05"))
 
 	case 8:
 		// Leavs tokens from a server
-		color.Cyan("Guild Leaver")
+		color.Cyan("Выйти из сервера")
 		cfg, instances, err := getEverything()
 		if err != nil {
-			color.Red("Error while getting necessary data %v", err)
+			color.Red("Ошибка при получении необходимых данных %v", err)
 			ExitSafely()
 
 		}
-		color.White("Enter the number of threads (0 for unlimited): ")
+		color.White("Введите количество потоков (0 для неограниченного количества): ")
 		var threads int
 		fmt.Scanln(&threads)
 		if threads > len(instances) {
@@ -914,10 +915,10 @@ func Options() {
 		if threads == 0 {
 			threads = len(instances)
 		}
-		color.White("Enter delay between leaves: ")
+		color.White("Введите задержку между виходами: ")
 		var delay int
 		fmt.Scanln(&delay)
-		color.White("Enter serverid: ")
+		color.White("Введите ID сервера: ")
 		var serverid string
 		fmt.Scanln(&serverid)
 		c := goccm.New(threads)
@@ -927,25 +928,25 @@ func Options() {
 			go func(i int) {
 				p := instances[i].Leave(serverid)
 				if p == 0 {
-					color.Red("[%v] Error while leaving", time.Now().Format("15:04:05"))
+					color.Red("[%v] Ошибка при выходе", time.Now().Format("15:04:05"))
 				}
 				if p == 200 || p == 204 {
-					color.Green("[%v] Left server", time.Now().Format("15:04:05"))
+					color.Green("[%v] Покинул сервер", time.Now().Format("15:04:05"))
 				} else {
-					color.Red("[%v] Error while leaving", time.Now().Format("15:04:05"))
+					color.Red("[%v] Ошибка при выходе", time.Now().Format("15:04:05"))
 				}
 				time.Sleep(time.Duration(delay) * time.Second)
 				c.Done()
 			}(i)
 		}
 		c.WaitAllDone()
-		color.Green("[%v] All threads finished", time.Now().Format("15:04:05"))
+		color.Green("[%v] Завершил все потоки", time.Now().Format("15:04:05"))
 	case 9:
 
-		color.Blue("Token Onliner")
+		color.Blue("Токен Onliner")
 		_, instances, err := getEverything()
 		if err != nil {
-			color.Red("Error while getting necessary data %v", err)
+			color.Red("Ошибка при получении необходимых данных %v", err)
 			ExitSafely()
 		}
 		var wg sync.WaitGroup
@@ -954,15 +955,15 @@ func Options() {
 			go func(i int) {
 				err := instances[i].StartWS()
 				if err != nil {
-					color.Red("[%v] Error while opening websocket: %v", time.Now().Format("15:04:05"), err)
+					color.Red("[%v] Ошибка при открытии вебсокета: %v", time.Now().Format("15:04:05"), err)
 				} else {
-					color.Green("[%v] Websocket opened %v", time.Now().Format("15:04:05"), instances[i].Token)
+					color.Green("[%v] Открыт вебсокет %v", time.Now().Format("15:04:05"), instances[i].Token)
 				}
 				wg.Done()
 			}(i)
 		}
 		wg.Wait()
-		color.Green("[%v] All Token online. Press ENTER to disconnect and continue the program", time.Now().Format("15:04:05"))
+		color.Green("[%v] Все Токены онлайн. Нажмите ENTER для отключения и продолжения программы", time.Now().Format("15:04:05"))
 		bufio.NewReader(os.Stdin).ReadBytes('\n')
 		wg.Add(len(instances))
 		for i := 0; i < len(instances); i++ {
@@ -972,53 +973,53 @@ func Options() {
 			}(i)
 		}
 		wg.Wait()
-		color.Green("[%v] All Token offline", time.Now().Format("15:04:05"))
+		color.Green("[%v] Все Токены offline", time.Now().Format("15:04:05"))
 
 	case 10:
-		color.Blue("Scraping Menu")
+		color.Blue("Парсинг меню")
 		cfg, _, err := getEverything()
 		if err != nil {
-			color.Red("Error while getting necessary data %v", err)
+			color.Red("Ошибка при получении необходимых данных %v", err)
 		}
-		color.White("1) Online Scraper (Opcode 14)\n2) Scrape from Reactions\n3) Offline Scraper (Opcode 8)")
+		color.White("1) Онлайн Парсинг\n2) Парсинг из Реакций\n3) Offline Парсинг")
 		var options int
 		fmt.Scanln(&options)
 		if options == 1 {
 			var token string
-			color.White("Enter token: ")
+			color.White("Введите токен: ")
 			fmt.Scanln(&token)
 			var serverid string
-			color.White("Enter serverid: ")
+			color.White("Введите  ID сервера: ")
 			fmt.Scanln(&serverid)
 			var channelid string
-			color.White("Enter channelid: ")
+			color.White("Введите ID канала: ")
 			fmt.Scanln(&channelid)
 
 			Is := utilities.Instance{Token: token}
 			t := 0
 			for {
 				if t >= 5 {
-					color.Red("[%v] Couldn't connect to websocket after retrying.", time.Now().Format("15:04:05"))
+					color.Red("[%v] Не удалось подключиться к вебсокету после повторной попытки.", time.Now().Format("15:04:05"))
 					break
 				}
 				err := Is.StartWS()
 				if err != nil {
-					color.Red("[%v] Error while opening websocket: %v", time.Now().Format("15:04:05"), err)
+					color.Red("[%v] Ошибка при открытии вебсокета: %v", time.Now().Format("15:04:05"), err)
 				} else {
 					break
 				}
 				t++
 			}
 
-			color.Green("[%v] Websocket opened %v", time.Now().Format("15:04:05"), Is.Token)
+			color.Green("[%v] Открыт вебсокет %v", time.Now().Format("15:04:05"), Is.Token)
 
 			i := 0
 			for {
 				err := utilities.Scrape(Is.Ws, serverid, channelid, i)
 				if err != nil {
-					color.Red("[%v] Error while scraping: %v", time.Now().Format("15:04:05"), err)
+					color.Red("[%v] Ошибка при парсинге: %v", time.Now().Format("15:04:05"), err)
 				}
-				color.Green("[%v] Token %v Scrape Count: %v", time.Now().Format("15:04:05"), Is.Token, len(Is.Ws.Members))
+				color.Green("[%v] Токен %v количество получено: %v", time.Now().Format("15:04:05"), Is.Token, len(Is.Ws.Members))
 				if Is.Ws.Complete {
 					break
 				}
@@ -1028,10 +1029,10 @@ func Options() {
 			if Is.Ws != nil {
 				Is.Ws.Close()
 			}
-			color.Green("[%v] Scraping finished. Scraped %v members", time.Now().Format("15:04:05"), len(Is.Ws.Members))
+			color.Green("[%v] Парсинг завершен. Получено %v пользователей", time.Now().Format("15:04:05"), len(Is.Ws.Members))
 			clean := utilities.RemoveDuplicateStr(Is.Ws.Members)
-			color.Green("[%v] Removed Duplicates. Scraped %v members", time.Now().Format("15:04:05"), len(clean))
-			color.Green("[%v] Write to memberids.txt? (y/n)", time.Now().Format("15:04:05"))
+			color.Green("[%v] Удалены дубликаты. Получено %v пользователей", time.Now().Format("15:04:05"), len(clean))
+			color.Green("[%v] Записать в файл memberids.txt? (y/n)", time.Now().Format("15:04:05"))
 
 			var write string
 			fmt.Scanln(&write)
@@ -1039,34 +1040,34 @@ func Options() {
 				for k := 0; k < len(clean); k++ {
 					err := utilities.WriteLines("memberids.txt", clean[k])
 					if err != nil {
-						color.Red("[%v] Error while writing to memberids.txt: %v", time.Now().Format("15:04:05"), err)
+						color.Red("[%v] Ошибка при записи в файл memberids.txt: %v", time.Now().Format("15:04:05"), err)
 					}
 				}
-				color.Green("[%v] Wrote to memberids.txt", time.Now().Format("15:04:05"))
-				err := WriteFile("scraped/"+serverid+".txt", clean)
+				color.Green("[%v] Записано в файл memberids.txt", time.Now().Format("15:04:05"))
+				err := WriteFile("парсинг/"+serverid+".txt", clean)
 				if err != nil {
-					color.Red("[%v] Error while writing to file: %v", time.Now().Format("15:04:05"), err)
+					color.Red("[%v] Ошибка при записи в файл: %v", time.Now().Format("15:04:05"), err)
 				}
 			}
 
 		}
 		if options == 2 {
 			var token string
-			color.White("Enter token: ")
+			color.White("Введите токен: ")
 			fmt.Scanln(&token)
 			var messageid string
-			color.White("Enter messageid: ")
+			color.White("Введите ID сообщения: ")
 			fmt.Scanln(&messageid)
 			var channelid string
-			color.White("Enter channelid: ")
+			color.White("Введите ID канала: ")
 			fmt.Scanln(&channelid)
-			color.White("1) Get Emoji from Message\n2) Enter Emoji manually")
+			color.White("1) Получить Emoji из сообщения\n2) Ввести Emoji вручную")
 			var option int
 			var send string
 			fmt.Scanln(&option)
 			var emoji string
 			if option == 2 {
-				color.White("Enter emoji [For Native Discord Emojis, just copy and paste emoji as unicode. For Custom/Nitro Emojis enter Name:EmojiID exactly in this format]: ")
+				color.White("Введите emoji [Для нативных эмодзи Discord просто скопируйте и вставьте emoji в формате unicode. Для пользовательских/нитро-эмодзи введите Имя:EmojiID именно в таком формате]: ")
 				fmt.Scanln(&emoji)
 				send = emoji
 			} else {
@@ -1074,7 +1075,7 @@ func Options() {
 				if err != nil {
 					fmt.Println(err)
 				}
-				color.White("Select Emoji")
+				color.White("Выберите Emoji")
 				for i := 0; i < len(msg.Reactions); i++ {
 					color.White("%v) %v %v", i, msg.Reactions[i].Emojis.Name, msg.Reactions[i].Count)
 				}
@@ -1108,25 +1109,25 @@ func Options() {
 				allUIDS = append(allUIDS, rxn...)
 
 			}
-			color.Green("[%v] Scraping finished. Scraped %v lines - Removing Duplicates", time.Now().Format("15:04:05"), len(allUIDS))
+			color.Green("[%v] Парсинг завершен. Полученно %v линии - Удаление дубликатов", time.Now().Format("15:04:05"), len(allUIDS))
 			clean := utilities.RemoveDuplicateStr(allUIDS)
-			color.Green("[%v] Write to memberids.txt? (y/n)", time.Now().Format("15:04:05"))
+			color.Green("[%v] Записать в файл memberids.txt? (y/n)", time.Now().Format("15:04:05"))
 			var write string
 			fmt.Scanln(&write)
 			if write == "y" {
 				for k := 0; k < len(clean); k++ {
 					err := utilities.WriteLines("memberids.txt", clean[k])
 					if err != nil {
-						color.Red("[%v] Error while writing to memberids.txt: %v", time.Now().Format("15:04:05"), err)
+						color.Red("[%v] Ошибка при записи в файл memberids.txt: %v", time.Now().Format("15:04:05"), err)
 					}
 				}
-				color.Green("[%v] Wrote to memberids.txt", time.Now().Format("15:04:05"))
-				err := WriteFile("scraped/"+messageid+".txt", allUIDS)
+				color.Green("[%v] Записано в файл memberids.txt", time.Now().Format("15:04:05"))
+				err := WriteFile("парсинг/"+messageid+".txt", allUIDS)
 				if err != nil {
-					color.Red("[%v] Error while writing to file: %v", time.Now().Format("15:04:05"), err)
+					color.Red("[%v] Ошибка при записи в файл: %v", time.Now().Format("15:04:05"), err)
 				}
 			}
-			fmt.Println("Done")
+			fmt.Println("Готово")
 		}
 		if options == 3 {
 			// Query Brute. This is a test function. Try using the compressed stream to appear legit.
@@ -1139,16 +1140,16 @@ func Options() {
 			// Multiple instance support. Division of queries and hence completes in lesser time.
 			// Might not need to worry about spaces at all as @ uses no spaces.
 			// Starting Websocket(s) Appending to a slice. 1 for now, add more later.
-			color.Cyan("Opcode 8 Scraper (Offline Scraper)")
-			color.White("This feature is intentionally slowed down with high delays. Please use multiple tokens and ensure they are in the server before starting to complete it quick.")
+			color.Cyan("Offline Парсинг")
+			color.White("Эта функция намеренно замедляется с большими задержками. Пожалуйста, используйте несколько токенов и убедитесь, что они находятся на сервере перед началом работы, чтобы завершить ее быстро.")
 			cfg, instances, err := getEverything()
 			if err != nil {
-				color.Red("[%v] Error while getting config: %v", time.Now().Format("15:04:05"), err)
+				color.Red("[%v] Ошибка при получении конфигурации: %v", time.Now().Format("15:04:05"), err)
 				ExitSafely()
 			}
 			var scraped []string
 			// Input the number of tokens to be used
-			color.Green("[%v] How many tokens do you wish to use? You have %v ", time.Now().Format("15:04:05"), len(instances))
+			color.Green("[%v] Сколько Токенов вы хотите использовать? У вас есть %v ", time.Now().Format("15:04:05"), len(instances))
 			var numTokens int
 			quit := make(chan bool)
 			var allQueries []string
@@ -1165,21 +1166,21 @@ func Options() {
 			}
 
 			if numTokens > len(instances) {
-				color.Red("[%v] You only have %v tokens in your tokens.txt Using the maximum number of tokens possible", time.Now().Format("15:04:05"), len(instances))
+				color.Red("[%v] У вас только %v Токенов в файле tokens.txt Использую максимальное  количество токенов", time.Now().Format("15:04:05"), len(instances))
 			} else if numTokens <= 0 {
-				color.Red("[%v] You must atleast use 1 token", time.Now().Format("15:04:05"))
+				color.Red("[%v] Вы должны использовать как минимум 1 Токен", time.Now().Format("15:04:05"))
 				ExitSafely()
 			} else if numTokens <= len(instances) {
-				color.Green("[%v] You have %v tokens in your tokens.txt Using %v tokens", time.Now().Format("15:04:05"), len(instances), numTokens)
+				color.Green("[%v] У вас есть %v токенов в файле tokens.txt Использование %v токенов", time.Now().Format("15:04:05"), len(instances), numTokens)
 				instances = instances[:numTokens]
 			} else {
-				color.Red("[%v] Invalid input", time.Now().Format("15:04:05"))
+				color.Red("[%v] Неверный ввод", time.Now().Format("15:04:05"))
 			}
 
-			color.Green("[%v] Enter the ServerID", time.Now().Format("15:04:05"))
+			color.Green("[%v] Введите  ID сервера", time.Now().Format("15:04:05"))
 			var serverid string
 			fmt.Scanln(&serverid)
-			color.Green("[%v] Press ENTER to START and STOP scraping", time.Now().Format("15:04:05"))
+			color.Green("[%v] Нажмите ENTER для запуска и остановки парсинга", time.Now().Format("15:04:05"))
 			bufio.NewReader(os.Stdin).ReadBytes('\n')
 			// Starting the instances as GOroutines
 			for i := 0; i < len(instances); i++ {
@@ -1218,7 +1219,7 @@ func Options() {
 							}
 							err := utilities.ScrapeOffline(instances[i].Ws, serverid, query)
 							if err != nil {
-								color.Red("[%v] %v Error while scraping: %v", time.Now().Format("15:04:05"), instances[i].Token, err)
+								color.Red("[%v] %v Ошибка при парсинге: %v", time.Now().Format("15:04:05"), instances[i].Token, err)
 								go func() {
 									queriesLeft <- query
 								}()
@@ -1246,13 +1247,13 @@ func Options() {
 									scraped = append(scraped, member.User.ID)
 								}
 							}
-							color.Green("[%v] Token %v Query %v Scraped %v [+%v]", time.Now().Format("15:04:05"), instances[i].Token, query, len(scraped), len(MemberInfo.Data.Members))
+							color.Green("[%v] Токен %v Запрос %v Получено %v [+%v]", time.Now().Format("15:04:05"), instances[i].Token, query, len(scraped), len(MemberInfo.Data.Members))
 
 							for i := 0; i < len(MemberInfo.Data.Members); i++ {
 								id := MemberInfo.Data.Members[i].User.ID
 								err := utilities.WriteLines("memberids.txt", id)
 								if err != nil {
-									color.Red("[%v] Error while writing to file: %v", time.Now().Format("15:04:05"), err)
+									color.Red("[%v] Ошибка при записи в файл: %v", time.Now().Format("15:04:05"), err)
 									continue
 								}
 							}
@@ -1276,15 +1277,15 @@ func Options() {
 			}
 
 			bufio.NewReader(os.Stdin).ReadBytes('\n')
-			color.Green("[%v] Stopping All instances", time.Now().Format("15:04:05"))
+			color.Green("[%v] Остановка всех потоков", time.Now().Format("15:04:05"))
 			for i := 0; i < len(instances); i++ {
 				go func() {
 					quit <- true
 				}()
 			}
 
-			color.Green("[%v] Scraping Complete. %v members scraped.", time.Now().Format("15:04:05"), len(scraped))
-			color.Green("Do you wish to write to file again? (y/n) [This will remove pre-existing IDs from memberids.txt]")
+			color.Green("[%v] Парсинг завершен. %v участников получено.", time.Now().Format("15:04:05"), len(scraped))
+			color.Green("Хотите ли вы снова записать файл? (y/n) [Это удалит ранее существовавшие идентификаторы из файла memberids.txt]")
 			var choice string
 			fmt.Scanln(&choice)
 			if choice == "y" || choice == "Y" {
@@ -1293,35 +1294,35 @@ func Options() {
 				if err != nil {
 					color.Red("[%v] Error while truncating file: %v", time.Now().Format("15:04:05"), err)
 				}
-				err = WriteFile("scraped/"+serverid, clean)
+				err = WriteFile("парсинг/"+serverid, clean)
 				if err != nil {
-					color.Red("[%v] Error while writing to file: %v", time.Now().Format("15:04:05"), err)
+					color.Red("[%v] Ошибка при записи в файл: %v", time.Now().Format("15:04:05"), err)
 				}
 			}
 
 		}
 	case 11:
-		color.Blue("Name Changer")
+		color.Blue("Смена имени")
 		_, instances, err := getEverything()
 		if err != nil {
-			color.Red("[%v] Error while getting necessary data: %v", time.Now().Format("15:04:05"), err)
+			color.Red("[%v] Ошибка при получении необходимых данных: %v", time.Now().Format("15:04:05"), err)
 		}
 		for i := 0; i < len(instances); i++ {
 			if !reg.MatchString(instances[i].Token) {
-				color.Red("[%v] Name changer requires tokens in email:pass:token format, there might be wrongly formatted tokens", time.Now().Format("15:04:05"))
+				color.Red("[%v] Программа смены имени требует токены в формате email:pass:token, возможно, токены неправильно отформатированы", time.Now().Format("15:04:05"))
 				continue
 			}
 			fullz := instances[i].Token
 			instances[i].Token = strings.Split(fullz, ":")[2]
 			instances[i].Password = strings.Split(fullz, ":")[1]
 		}
-		color.Red("NOTE: Profile pictures are changed randomly from the file.")
+		color.Red("Примечание: Фотографии профиля изменяются случайным образом из файла.")
 		users, err := utilities.ReadLines("names.txt")
 		if err != nil {
-			color.Red("[%v] Error while reading names.txt: %v", time.Now().Format("15:04:05"), err)
+			color.Red("[%v] При чтение файла ошибка names.txt: %v", time.Now().Format("15:04:05"), err)
 			ExitSafely()
 		}
-		color.Green("[%v] Enter number of threads: ", time.Now().Format("15:04:05"))
+		color.Green("[%v] Введите количество потоков: ", time.Now().Format("15:04:05"))
 
 		var threads int
 		fmt.Scanln(&threads)
@@ -1335,7 +1336,7 @@ func Options() {
 			go func(i int) {
 				r, err := instances[i].NameChanger(users[rand.Intn(len(users))])
 				if err != nil {
-					color.Red("[%v] %v Error while changing name: %v", time.Now().Format("15:04:05"), instances[i].Token, err)
+					color.Red("[%v] %v При изменении ИМЯ ошибка: %v", time.Now().Format("15:04:05"), instances[i].Token, err)
 					return
 				}
 				body, err := utilities.ReadBody(r)
@@ -1343,27 +1344,27 @@ func Options() {
 					fmt.Println(err)
 				}
 				if r.StatusCode == 200 || r.StatusCode == 204 {
-					color.Green("[%v] %v Changed name successfully", time.Now().Format("15:04:05"), instances[i].Token)
+					color.Green("[%v] %v ИМЯ успешно изменено", time.Now().Format("15:04:05"), instances[i].Token)
 				} else {
-					color.Red("[%v] %v Error while changing name: %v %v", time.Now().Format("15:04:05"), instances[i].Token, r.Status, string(body))
+					color.Red("[%v] %v При изменении ИМЯ ошибка: %v %v", time.Now().Format("15:04:05"), instances[i].Token, r.Status, string(body))
 				}
 				c.Done()
 			}(i)
 		}
 		c.WaitAllDone()
-		color.Green("[%v] All Done", time.Now().Format("15:04:05"))
+		color.Green("[%v] Все сделано", time.Now().Format("15:04:05"))
 
 	case 12:
-		color.Blue("Profile Picture Changer")
+		color.Blue("аватарка профиля изменен ")
 		_, instances, err := getEverything()
 		if err != nil {
-			color.Red("[%v] Error while getting necessary data: %v", time.Now().Format("15:04:05"), err)
+			color.Red("[%v] Ошибка при получении необходимых данных: %v", time.Now().Format("15:04:05"), err)
 		}
-		color.Red("NOTE: Only PNG and JPEG/JPG supported. Profile Pictures are changed randomly from the folder. Use PNG format for faster results.")
-		color.White("Loading Avatars..")
+		color.Red("ПРИМЕЧАНИЕ: Поддерживаются только PNG и JPEG/JPG. Картинки профиля меняются случайным образом из папки. Используйте формат PNG для получения более быстрых результатов.")
+		color.White("Загрузка аватаров...")
 		ex, err := os.Executable()
 		if err != nil {
-			color.Red("Couldn't find Exe")
+			color.Red("Не смог найти Exe")
 			ExitSafely()
 		}
 		ex = filepath.ToSlash(ex)
@@ -1371,22 +1372,22 @@ func Options() {
 
 		images, err := utilities.GetFiles(path)
 		if err != nil {
-			color.Red("Couldn't find images in PFPs folder")
+			color.Red("Не удалось найти изображения в папке PFPs")
 			ExitSafely()
 		}
-		color.Green("%v files found", len(images))
+		color.Green("%v найденные файлы", len(images))
 		var avatars []string
 
 		for i := 0; i < len(images); i++ {
 			av, err := utilities.EncodeImg(images[i])
 			if err != nil {
-				color.Red("Couldn't encode image")
+				color.Red("Не удалось закодировать изображение")
 				continue
 			}
 			avatars = append(avatars, av)
 		}
-		color.Green("%v avatars loaded", len(avatars))
-		color.Green("[%v] Enter number of threads: ", time.Now().Format("15:04:05"))
+		color.Green("%v  аватары загруженные", len(avatars))
+		color.Green("[%v] Введите количество потоков: ", time.Now().Format("15:04:05"))
 		var threads int
 		fmt.Scanln(&threads)
 		if threads > len(instances) {
@@ -1400,12 +1401,12 @@ func Options() {
 			go func(i int) {
 				r, err := instances[i].AvatarChanger(avatars[rand.Intn(len(avatars))])
 				if err != nil {
-					color.Red("[%v] %v Error while changing avatar: %v", time.Now().Format("15:04:05"), instances[i].Token, err)
+					color.Red("[%v] %v Ошибка при смене аватара: %v", time.Now().Format("15:04:05"), instances[i].Token, err)
 				} else {
 					if r.StatusCode == 204 || r.StatusCode == 200 {
-						color.Green("[%v] %v Avatar changed successfully", time.Now().Format("15:04:05"), instances[i].Token)
+						color.Green("[%v] %v Аватар успешно изменен", time.Now().Format("15:04:05"), instances[i].Token)
 					} else {
-						color.Red("[%v] %v Error while changing avatar: %v", time.Now().Format("15:04:05"), instances[i].Token, r.StatusCode)
+						color.Red("[%v] %v Ошибка при смене аватара: %v", time.Now().Format("15:04:05"), instances[i].Token, r.StatusCode)
 					}
 				}
 
@@ -1413,17 +1414,17 @@ func Options() {
 			}(i)
 		}
 		c.WaitAllDone()
-		color.Green("[%v] All done", time.Now().Format("15:04:05"))
+		color.Green("[%v] Все сделано", time.Now().Format("15:04:05"))
 	case 13:
-		color.White("Check if your tokens are still in the server")
+		color.White("Проверьте, находятся ли ваши токены на сервере")
 		_, instances, err := getEverything()
 		if err != nil {
-			color.Red("[%v] Error while getting necessary data: %v", time.Now().Format("15:04:05"), err)
+			color.Red("[%v] Ошибка при получении необходимых данных: %v", time.Now().Format("15:04:05"), err)
 			ExitSafely()
 		}
 		var serverid string
 		var inServer []string
-		color.Green("[%v] Enter server ID: ", time.Now().Format("15:04:05"))
+		color.Green("[%v] Введите ID сервера: ", time.Now().Format("15:04:05"))
 		fmt.Scanln(&serverid)
 		var wg sync.WaitGroup
 		wg.Add(len(instances))
@@ -1432,36 +1433,37 @@ func Options() {
 				defer wg.Done()
 				r, err := instances[i].ServerCheck(serverid)
 				if err != nil {
-					color.Red("[%v] %v Error while checking server: %v", time.Now().Format("15:04:05"), instances[i].Token, err)
+					color.Red("[%v] %v Ошибка при проверке сервера: %v", time.Now().Format("15:04:05"), instances[i].Token, err)
 				} else {
 					if r == 200 || r == 204 {
-						color.Green("[%v] %v is in server %v ", time.Now().Format("15:04:05"), instances[i].Token, serverid)
+						color.Green("[%v] %v находится на сервере %v ", time.Now().Format("15:04:05"), instances[i].Token, serverid)
 						inServer = append(inServer, instances[i].Token)
 					} else if r == 429 {
-						color.Green("[%v] %v is rate limited", time.Now().Format("15:04:05"), instances[i].Token)
+						color.Green("[%v] %v ограничена по лимитах", time.Now().Format("15:04:05"), instances[i].Token)
 					} else if r == 400 {
-						color.Red("[%v] Bad request - Invalid Server ID", time.Now().Format("15:04:05"))
+						color.Red("[%v] Плохой запрос - Неверный ID сервера", time.Now().Format("15:04:05"))
 					} else {
-						color.Red("[%v] %v is not in server [%v] [%v]", time.Now().Format("15:04:05"), instances[i].Token, serverid, r)
+						color.Red("[%v] %v не находится на сервере [%v] [%v]", time.Now().Format("15:04:05"), instances[i].Token, serverid, r)
 					}
 				}
 			}(i)
 		}
 		wg.Wait()
-		color.Green("[%v] All done. Do you wish to save only tokens in the server to tokens.txt ? (y/n)", time.Now().Format("15:04:05"))
+		color.Green("[%v] Все готово. Вы хотите сохранить только токены на сервере в файл tokens.txt? (y/n)", time.Now().Format("15:04:05"))
 		var save string
 		fmt.Scanln(&save)
 		if save == "y" || save == "Y" {
 			err := utilities.TruncateLines("tokens.txt", inServer)
 			if err != nil {
-				color.Red("[%v] Error while saving tokens: %v", time.Now().Format("15:04:05"), err)
+				color.Red("[%v]Ошибка при сохранении Токенов: %v", time.Now().Format("15:04:05"), err)
 			} else {
-				color.Green("[%v] Tokens saved to tokens.txt", time.Now().Format("15:04:05"))
+				color.Green("[%v] Токены сохраняются в файле tokens.txt", time.Now().Format("15:04:05"))
 			}
 		}
 
+	
 	case 14:
-		color.Blue("Made with <3 by github.com/V4NSH4J for free. If you were sold this program, you got scammed. Full length documentation for this is available on the github readme.")
+		color.Blue("Made  by @M_rd2 for Private.")
 	case 15:
 		// Exit without error
 		os.Exit(0)

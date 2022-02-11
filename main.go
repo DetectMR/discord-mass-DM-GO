@@ -53,8 +53,7 @@ func Options() {
 		color.Cyan("Режим отладки")
 	case 1:
 		var invitechoice int
-		color.White("color.Green("Инвайт Меню:\n1) Одиночный инвайт\n2) Масовый инвайт из файла")
-")
+		color.Green("Инвайт Меню:\n1) Одиночный инвайт\n2) Масовый инвайт из файла")
 		fmt.Scanln(&invitechoice)
 		if invitechoice != 1 && invitechoice != 2 {
 			color.Red("[%v] Invalid choice", time.Now().Format("15:04:05"))
